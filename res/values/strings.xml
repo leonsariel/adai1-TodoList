@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">adai1-TODO List</string>
+    <string name="action_settings">Settings</string>
+    <string name="list_label">Choose a list</string>
+
+    <string-array name="list_type">
+        <item>TODO Items</item>
+        <item>Archive Items</item>
+    </string-array>
+
+    <string name="email_select">Email Select Items</string>
+    <string name="email_list">Email Current List</string>
+    <string name="email_all">Email All Items</string>
+    <string name="clear">Clear</string>
+    <string name="add">ADD</string>
+    <string name="show_summary">Show Summary</string>
+    <string name="title_activity_summary">SummaryActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="return_main">Return</string>
+
+</resources>
