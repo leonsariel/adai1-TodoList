@@ -1,30 +1,18 @@
 package ca.ualberta.adai1_todolist;
 
-import java.io.Serializable;
 
-public class TodoItem implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3867211010134267995L;
-
+public class TodoItem {
+	
 	String item;
-	boolean archived = false;
-	boolean checked = false;
-	boolean selected = false;
+	boolean archived = false;//initial archive status
+	boolean checked = false;//initial check status
+	
 	public TodoItem(String item) {
 		this.item = item;
 	}
 
 	public String getItem() {
 		return item;
-	}
-	public void setSelect(Boolean isSelect){
-		selected = isSelect;
-	}
-	public boolean ifSelected(){
-		return selected;
 	}
 	public void setCheck(Boolean isChecked) {
 		checked = isChecked;

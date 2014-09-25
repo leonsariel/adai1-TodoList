@@ -51,7 +51,6 @@ public class TodoListAdapter extends ArrayAdapter<TodoItem> {
 		convertView.setTag(holder);
 		TodoItem item = list.get(position);
 		holder.itemText.setText(item.getItem());
-		holder.itemText.setSelected(item.ifSelected());
 		holder.checkBox.setChecked(item.ifChecked());
 		holder.checkBox.setOnCheckedChangeListener(new TodoCheckListener(
 				position));
@@ -71,6 +70,7 @@ public class TodoListAdapter extends ArrayAdapter<TodoItem> {
 		public void onCheckedChanged(CompoundButton buttonView,
 				boolean isChecked) {
 			list.get(this.position).setCheck(isChecked);
+			//save the check status when the check box is clicked
 			TodoListSave.saveInFile(context, theList, category);
 		}
 	}

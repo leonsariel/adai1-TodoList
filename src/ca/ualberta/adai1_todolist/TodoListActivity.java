@@ -35,22 +35,29 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 public class TodoListActivity extends Activity {
+	// declare name for save files
 	private static final String TODOLIST = "todoList.sav";
 	private static final String ARCHLIST = "archList.sav";
-	private Spinner selectCategory;
-	private ListView todoListView;
-	private EditText addTodoText;
-	private Button addTodoButton;
-	private Button clearButton;
-	private Button showSumBotton;
-	public static TodoList todo_list;
-	public static TodoList arch_list;
-	public static ArrayList<TodoItem> choose_email_list;
-	private TodoListAdapter todo_adapter;
-	private TodoListAdapter arch_adapter;
-
-	private ArrayAdapter spin_adapter;
-
+	// declare spinner, listview, edittext and buttons
+	private Spinner selectCategory = null;
+	private ListView todoListView = null;
+	private EditText addTodoText = null;
+	private Button addTodoButton = null;
+	private Button clearButton = null;
+	private Button showSumBotton = null;
+	// todo_list contains todo items that added
+	public static TodoList todo_list = null;
+	// arch_list contains archived items
+	public static TodoList arch_list = null;
+	// choose_email_list contains choosed items
+	private ArrayList<TodoItem> choose_email_list = null;
+	// todo list adapter
+	private TodoListAdapter todo_adapter = null;
+	// archived list adapter
+	private TodoListAdapter arch_adapter = null;
+	// spinner adapter
+	private ArrayAdapter spin_adapter = null;
+	// categoryID is for the
 	private static long categoryID;
 	private static final int ITEM_DELETE = 1;
 	private static final int ITEM_ARCHIVE = 2;
@@ -61,13 +68,12 @@ public class TodoListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_todo_list);
 
-		todoListView = (ListView) findViewById(R.id.todoListView);
 		selectCategory = (Spinner) findViewById(R.id.selectCategory);
+		todoListView = (ListView) findViewById(R.id.todoListView);
 		addTodoText = (EditText) findViewById(R.id.addTodoText);
 		addTodoButton = (Button) findViewById(R.id.addTodoButton);
 		clearButton = (Button) findViewById(R.id.clearButton);
 		showSumBotton = (Button) findViewById(R.id.showSummaryBotton);
-
 		spin_adapter = ArrayAdapter.createFromResource(this, R.array.list_type,
 				android.R.layout.simple_spinner_dropdown_item);
 		selectCategory.setAdapter(spin_adapter);
@@ -119,7 +125,7 @@ public class TodoListActivity extends Activity {
 			}
 		});
 
-		// this part is for email!!
+		// save the select items in the choose_email_list
 		todoListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -128,12 +134,11 @@ public class TodoListActivity extends Activity {
 				int size;
 				size = currentList().size();
 				choose_email_list = new ArrayList<TodoItem>();
-				SparseBooleanArray checkedIds = todoListView
+				SparseBooleanArray selectId = todoListView
 						.getCheckedItemPositions();
 				for (int i = 0; i < size; i++)
-					if (checkedIds.get(i))
+					if (selectId.get(i))
 						choose_email_list.add(currentList().get(i));
-
 			}
 		});
 
@@ -162,6 +167,7 @@ public class TodoListActivity extends Activity {
 			todo_list = new TodoList();
 		if (arch_list == null)
 			arch_list = new TodoList();
+		choose_email_list = new ArrayList<TodoItem>();
 		todo_adapter = new TodoListAdapter(this, todo_list.getList(),
 				todo_list, 0);
 		arch_adapter = new TodoListAdapter(this, arch_list.getList(),
@@ -226,24 +232,45 @@ public class TodoListActivity extends Activity {
 
 	}
 
-	// show text!
+	// when no text is entered, show the text:No text entered
 	public void noTextEntered() {
 		Toast.makeText(this, "No Text Entered", Toast.LENGTH_SHORT).show();
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main_todo_list, menu);
+		return true;
+	}
+
+	// email select items
 	public void emailSelectItems(MenuItem menu) {
-		emailListProcessor(choose_email_list);
+		if (choose_email_list.size() != 0)
+			emailListProcessor(choose_email_list);
+		else
+			Toast.makeText(this, "No item select", Toast.LENGTH_SHORT).show();
 	}
 
+	// email current list
 	public void emailCurrentList(MenuItem menu) {
-		emailListProcessor(currentList().getArrayList());
+		if (currentList().size() != 0)
+			emailListProcessor(currentList().getArrayList());
+		else
+			Toast.makeText(this, "Current list is empty", Toast.LENGTH_SHORT)
+					.show();
 	}
 
+	// email all items in both todo and archive list
 	public void emailAllItems(MenuItem menu) {
 		ArrayList<TodoItem> allItems = new ArrayList<TodoItem>();
 		allItems.addAll(todo_list.getArrayList());
 		allItems.addAll(arch_list.getArrayList());
-		emailListProcessor(allItems);
+		if (allItems.size() != 0)
+			emailListProcessor(allItems);
+		else
+			Toast.makeText(this, "There is no Todo items.", Toast.LENGTH_SHORT)
+					.show();
 	}
 
 	// http://stackoverflow.com/questions/2197741/how-can-i-send-emails-from-my-android-application
@@ -251,11 +278,11 @@ public class TodoListActivity extends Activity {
 	public void emailListProcessor(ArrayList<TodoItem> mailList) {
 		StringBuffer mailBody = new StringBuffer();
 		for (int i = 0; i < mailList.size(); i++)
-			mailBody.append(mailList.get(i).getItem() + "\n");
+			mailBody.append(mailList.get(i).getItem() + "\n->Checked: "
+					+ mailList.get(i).ifChecked() + "\n->Archived: "
+					+ mailList.get(i).ifArchived() + "\n");
 		Intent i = new Intent(Intent.ACTION_SEND);
 		i.setType("message/rfc822");
-		i.putExtra(Intent.EXTRA_EMAIL, new String[] { "recipient@example.com" });
-		i.putExtra(Intent.EXTRA_SUBJECT, "Select Todo List Items");
 		i.putExtra(Intent.EXTRA_TEXT, mailBody.toString());
 		try {
 			startActivity(Intent.createChooser(i, "Send mail..."));
@@ -265,7 +292,7 @@ public class TodoListActivity extends Activity {
 					.show();
 		}
 	}
-
+	//return the current list on the listview
 	public TodoList currentList() {
 		if (categoryID == 0)
 			return todo_list;
@@ -299,19 +326,4 @@ public class TodoListActivity extends Activity {
 		return list;
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main_todo_list, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		return super.onOptionsItemSelected(item);
-	}
 }

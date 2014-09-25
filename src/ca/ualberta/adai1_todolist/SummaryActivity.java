@@ -5,8 +5,6 @@ import ca.ualberta.adai1_todolist.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -20,7 +18,7 @@ public class SummaryActivity extends Activity {
 		setContentView(R.layout.activity_summary);
 		TextView showNumber = (TextView) findViewById(R.id.showSummaryView);
 		Button backToMain = (Button) findViewById(R.id.backToMain);
-		// calculate and show the summary while click on the show summary button
+		// calculate and show the summary at the summary activity
 		int todo_size = TodoListActivity.todo_list.size();
 		int arch_size = TodoListActivity.arch_list.size();
 		int todo_check = TodoListActivity.todo_list.checkedCount();
@@ -33,12 +31,13 @@ public class SummaryActivity extends Activity {
 
 		String summary = new String("All Items:" + all_size
 				+ "\n->All Checked:" + all_checked + "\n->All Unchecked:"
-				+ all_unchecked + "\n\nTodo Items:" + todo_size
-				+ "\n->Checked Todo:" + todo_check + "\n->Unchecked Todo:"
-				+ todo_uncheck + "\n\nArchived Items:" + arch_size
-				+ " \n->Checked Archived:" + arch_check
-				+ "\n->Unchecked Archived:" + arch_uncheck + "");
+				+ all_unchecked + "\n\nUnarchived Items:" + todo_size
+				+ "\n->Checked Unarchived:" + todo_check
+				+ "\n->Unchecked Unarchived:" + todo_uncheck
+				+ "\n\nArchived Items:" + arch_size + " \n->Checked Archived:"
+				+ arch_check + "\n->Unchecked Archived:" + arch_uncheck + "");
 		showNumber.setText(summary);
+		//return to the main activity
 		backToMain.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(SummaryActivity.this,
@@ -47,21 +46,5 @@ public class SummaryActivity extends Activity {
 			}
 		});
 
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.summary, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-
-		return super.onOptionsItemSelected(item);
 	}
 }

@@ -1,30 +1,24 @@
 package ca.ualberta.adai1_todolist;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-public class TodoList implements Serializable {
+public class TodoList {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5369600595466689740L;
 	ArrayList<TodoItem> todoList;
 
 	public TodoList() {
 		todoList = new ArrayList<TodoItem>();
 	}
 
+	// return a List
 	public List<TodoItem> getList() {
 		return todoList;
 	}
-	public ArrayList<TodoItem> getArrayList(){
-		
-		return todoList;
-	}
-	public Collection<TodoItem> getItems() {
+
+	// return an ArrayList
+	public ArrayList<TodoItem> getArrayList() {
+
 		return todoList;
 	}
 
@@ -48,6 +42,7 @@ public class TodoList implements Serializable {
 		return todoList.size();
 	}
 
+	// count the checked items in the list
 	public int checkedCount() {
 		int c_count = 0;
 		for (int i = 0; i < todoList.size(); i++) {
@@ -57,12 +52,7 @@ public class TodoList implements Serializable {
 		}
 		return c_count;
 	}
-
-	public void set(int position, String item) {
-		TodoItem todoItem = new TodoItem(item);
-		todoList.set(position, todoItem);
-	}
-
+	//get the item at current position
 	public TodoItem get(int position) {
 		return todoList.get(position);
 	}
