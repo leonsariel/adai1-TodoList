@@ -32,7 +32,7 @@ public class TodoListAdapter extends ArrayAdapter<TodoItem> {
 		this.category = category;
 	}
 
-	// http://blog.csdn.net/notice520/article/details/7266896
+	// http://blog.csdn.net/notice520/article/details/7266896 2014-9-12
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder = null;
@@ -53,17 +53,8 @@ public class TodoListAdapter extends ArrayAdapter<TodoItem> {
 		holder.itemText.setText(item.getItem());
 		holder.itemText.setSelected(item.ifSelected());
 		holder.checkBox.setChecked(item.ifChecked());
-
-		// if (item.ifArchived()){
-		// if the item is archived, then make the item can't check/uncheck
-		// holder.checkBox.setEnabled(false);
-		// }
-		// else{
-		// holder.checkBox.setEnabled(true);
 		holder.checkBox.setOnCheckedChangeListener(new TodoCheckListener(
 				position));
-		// }
-		//
 		return convertView;
 	}
 
