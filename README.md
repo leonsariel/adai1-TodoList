@@ -45,7 +45,7 @@ If you exit the App, it will save everything you did, and will load when the App
 License
 ========================================================
 
- TODO List: record/delete TODO items with checkbox, archive function and can be email
+ adai1-TodoList: record/delete TODO items with checkbox, archive function and can be email
  Copyright (C) 2014  Anni Dai adai1@ualberta.ca
 
  This program is free software: you can redistribute it and/or modify
