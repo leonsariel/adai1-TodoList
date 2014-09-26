@@ -7,45 +7,38 @@ lab section:        D01
 =========================================================
 This TodoList Application will start by click the app "adai1-TodoList" in the Launcher.
 =========================================================
-After start the application, the main activity has three button(show summary, add, clear),
-one spinner, one gray listview area, one edit text field and the right corner has a main
-menu(three dots).
-If you want to add a todo item, just type the context in the edit text field and click the
-add button on the right. If you want to clear the edit text field click the clear button.
-After you click the add button, the item will show on the scrollable listview area with a 
-checkbox on the right.
-If you want to check an item, just click the checkbox. If you want to uncheck the checked box
-again.
-If you want to delete or archive/unarchive an item, long click the item and a menu will pop up
-with two options. If the item is unarchive, then the options will be Delete and Archive. If the
-item is archived, then the options will be Delete and Unarchive.
+After start the application, the main activity has three button(show summary, add, clear), one spinner, one gray listview area, one edit text field and the right corner has a main menu(three dots).
+
+->To Add Item:
+If you want to add an item just type the context in the edit text field and click the add button on the right. If you want to clear the edit text field click the clear button.
+After you click the add button, the item will show on the scrollable listview area with a checkbox on the right.
+
+->To Check/Uncheck Item:
+If you want to check an item, just click the checkbox. If you want to uncheck the checked box again.
+
+->To Delete or Archive/Unarchive:
+If you want to delete or archive/unarchive an item, long click the item and a menu will pop up with two options. If the item is unarchive, then the options will be Delete and Archive. If the item is archived, then the options will be Delete and Unarchive.
 Once you click on the delete option, the item will be deleted.
-If you click on the Archive option,the item will be archived and move to the Archive List, and
-will no longer show in the TODO List.
-To see the archived list, you can click on the spinner and choose archive list option. Once the
-archive list category is been chose, the listview area will switch to show the archived list.
-You may not add item to the archive list by enter text and click add button, to add new item you
-need to switch to the TODO List by using the spinner.
+If you click on the Archive option,the item will be archived and move to the Archive List, and will no longer show in the TODO List.
+
+->To Switch between Archive list and TODO list:
+To see the archived list, you can click on the spinner and choose archive list option. Once the archive list category is been chose, the listview area will switch to show the archived list.
+You may not add item to the archive list by enter text and click add button, to add new item you need to switch to the TODO List by using the spinner.
+
+->To email items/list:
 When click the menu button(three dots on the right corner) you will see three options: 
 Email Select Items, Email Current List and Email All Items.
-In order to use email function, you need to make sure you have App that is capable for email and
-your email account has already setup.
-If you want to email some select items, you should first click the items(not on the check box)
-to select the items, the selected items will be highlight. Then click menu button and choose
-Email Select Items, then the email app will be call and the chosen items will be in the text body
-with their status(->checked:true/false ->archived:true/false).
+In order to use email function, you need to make sure you have App that is capable for email and your email account has already setup.
+If you want to email some select items, you should first click the items(not on the check box) to select the items, the selected items will be highlight. Then click menu button and choose Email Select Items, then the email app will be call and the chosen items will be in the text body with their status(->checked:true/false ->archived:true/false).
 If you want to email TODO List/Archive List, you need to be sure the spinner shows:
-TODO List/Archive List, then click the main menu and choose Email Current List. Then the email app 
-will be call and the TODO List will be in the text body.
-If you want to email all the items(both TODO List and Archive List), choose Email All Items from the
-menu. And the list will be shown with each item's status on the text body in the email app that is
-called.
-If you want to see the summary, press the Show Summary button on the main activity, and the activity
-will switch to the summary activity.
+TODO List/Archive List, then click the main menu and choose Email Current List. Then the email app will be call and the TODO List will be in the text body.
+If you want to email all the items(both TODO List and Archive List), choose Email All Items from the menu. And the list will be shown with each item's status on the text body in the email app that is called.
+
+->To see summary:
+If you want to see the summary, press the Show Summary button on the main activity, and the activity will switch to the summary activity.
 ========================================================
 The summary activity has a text view and a return button.
-The text view will show the count of items of both Todo List and Archive List, and each with the count of
-checked/unchecked items from the List.
+The text view will show the count of items of both Todo List and Archive List, and each with the count of checked/unchecked items from the List.
 ========================================================
 If you exit the App, it will save everything you did, and will load when the App start.
 ========================================================
