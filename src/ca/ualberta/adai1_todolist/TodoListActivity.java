@@ -1,20 +1,10 @@
 package ca.ualberta.adai1_todolist;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
+
 import java.util.ArrayList;
-
 import ca.ualberta.adai1_todolist.R;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.ContextMenu;
@@ -126,7 +116,7 @@ public class TodoListActivity extends Activity {
 
 			}
 		});
-		
+
 		// on click on item save the select items in the choose_email_list
 		todoListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -158,12 +148,8 @@ public class TodoListActivity extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		todo_list = loadFromFile(TODOLIST);
-		arch_list = loadFromFile(ARCHLIST);
-		if (todo_list == null)
-			todo_list = new TodoList();
-		if (arch_list == null)
-			arch_list = new TodoList();
+		todo_list = TodoListController.loadFromFile(this, TODOLIST);
+		arch_list = TodoListController.loadFromFile(this, ARCHLIST);
 		choose_email_list = new ArrayList<TodoItem>();
 		todo_adapter = new TodoListAdapter(this, todo_list.getList(),
 				todo_list, 0);
@@ -186,11 +172,33 @@ public class TodoListActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if(categoryID == 0)
+		addTodoText.setText(enteredText);
+		if (categoryID == 0)
 			todoListView.setAdapter(todo_adapter);
 		else
 			todoListView.setAdapter(arch_adapter);
-		update();
+	}
+
+	// change the adapter while click on different category
+	// update both todo list and arch list at the same time
+	private void update() {
+		todo_adapter.notifyDataSetChanged();
+		arch_adapter.notifyDataSetChanged();
+		TodoListController.saveInFile(this, todo_list, 0);
+		TodoListController.saveInFile(this, arch_list, 1);
+	}
+
+	// http://developer.android.com/reference/android/util/SparseBooleanArray.html
+	// 2014-9-24
+	// get all select item and save in the choose_mail_list
+	private void updateChooseList() {
+		int size;
+		size = currentList().size();
+		choose_email_list = new ArrayList<TodoItem>();
+		SparseBooleanArray selectId = todoListView.getCheckedItemPositions();
+		for (int i = 0; i < size; i++)
+			if (selectId.get(i))
+				choose_email_list.add(currentList().get(i));
 	}
 
 	// http://www.oschina.net/code/snippet_1014520_27327 2014-9-23
@@ -263,16 +271,6 @@ public class TodoListActivity extends Activity {
 		return true;
 	}
 
-	private void updateChooseList() {
-		int size;
-		size = currentList().size();
-		choose_email_list = new ArrayList<TodoItem>();
-		SparseBooleanArray selectId = todoListView.getCheckedItemPositions();
-		for (int i = 0; i < size; i++)
-			if (selectId.get(i))
-				choose_email_list.add(currentList().get(i));
-	}
-
 	// email select items
 	public void emailSelectItems(MenuItem menu) {
 		if (choose_email_list.size() != 0)
@@ -328,32 +326,6 @@ public class TodoListActivity extends Activity {
 			return todo_list;
 		else
 			return arch_list;
-	}
-
-	// change the adapter while click on different category
-	// update both todo list and arch list at the same time
-	private void update() {
-		todo_adapter.notifyDataSetChanged();
-		arch_adapter.notifyDataSetChanged();
-		TodoListSave.saveInFile(this, todo_list, 0);
-		TodoListSave.saveInFile(this, arch_list, 1);
-	}
-
-	private TodoList loadFromFile(String fileName) {
-		TodoList list = null;
-		try {
-			FileInputStream fis = openFileInput(fileName);
-			BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-			Gson gson = new Gson();
-			// Following line from
-			// https://sites.google.com/site/gson/gson-user-guide 2014-09-23
-			Type listType = new TypeToken<TodoList>() {
-			}.getType();
-			list = gson.fromJson(in, listType);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		return list;
 	}
 
 }

@@ -69,7 +69,7 @@ public class TodoListAdapter extends ArrayAdapter<TodoItem> {
 				boolean isChecked) {
 			list.get(this.position).setCheck(isChecked);
 			//save the check status when the check box is clicked
-			TodoListSave.saveInFile(context, theList, category);
+			TodoListController.saveInFile(context, theList, category);
 		}
 	}
 
