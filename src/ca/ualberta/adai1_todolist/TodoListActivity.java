@@ -91,6 +91,10 @@ public class TodoListActivity extends Activity {
 		super.onStart();
 		todo_list = TodoListControl.loadFromFile(this, TODOLISTFILE);
 		arch_list = TodoListControl.loadFromFile(this, ARCHLISTFILE);
+		if (todo_list == null)
+			todo_list = new TodoList();
+		if (arch_list == null)
+			arch_list = new TodoList();
 		choose_email_list = new ArrayList<TodoItem>();
 		todo_adapter = new TodoListAdapter(this, todo_list.getList(),
 				todo_list, 0);
