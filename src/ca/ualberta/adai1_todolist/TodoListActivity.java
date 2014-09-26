@@ -14,6 +14,7 @@ import com.google.gson.reflect.TypeToken;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.ContextMenu;
@@ -57,6 +58,7 @@ public class TodoListActivity extends Activity {
 	private TodoListAdapter arch_adapter = null;
 	// spinner adapter
 	private ArrayAdapter spin_adapter = null;
+	private String enteredText;
 	// categoryID is for the
 	private static long categoryID;
 	private static final int ITEM_DELETE = 1;
@@ -124,21 +126,14 @@ public class TodoListActivity extends Activity {
 
 			}
 		});
-
-		// save the select items in the choose_email_list
+		
+		// on click on item save the select items in the choose_email_list
 		todoListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				int size;
-				size = currentList().size();
-				choose_email_list = new ArrayList<TodoItem>();
-				SparseBooleanArray selectId = todoListView
-						.getCheckedItemPositions();
-				for (int i = 0; i < size; i++)
-					if (selectId.get(i))
-						choose_email_list.add(currentList().get(i));
+				updateChooseList();
 			}
 		});
 
@@ -157,7 +152,9 @@ public class TodoListActivity extends Activity {
 				});
 	}
 
-	// From lonelyTwitter
+	// https://github.com/Annieday/lonelyTwitter/blob/master/src/ca/ualberta/cs/lonelytwitter/LonelyTwitterActivity.java
+	// 2014-9-23
+
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -174,22 +171,42 @@ public class TodoListActivity extends Activity {
 				arch_list, 1);
 	}
 
+	@Override
+	protected void onPause() {
+		super.onPause();
+		enteredText = addTodoText.getText().toString();
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		addTodoText.setText(enteredText);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if(categoryID == 0)
+			todoListView.setAdapter(todo_adapter);
+		else
+			todoListView.setAdapter(arch_adapter);
+		update();
+	}
+
 	// http://www.oschina.net/code/snippet_1014520_27327 2014-9-23
-	protected void changeList() {
+	private void changeList() {
 		if (categoryID == 0) {
 			addTodoButton.setEnabled(true);
 			addTodoText.setEnabled(true);
 			clearButton.setEnabled(true);
-			todo_adapter = new TodoListAdapter(this, todo_list.getList(),
-					todo_list, 0);
+			choose_email_list = new ArrayList<TodoItem>();
 			todoListView.setAdapter(todo_adapter);
 		}
 		if (categoryID == 1) {
 			addTodoButton.setEnabled(false);
 			addTodoText.setEnabled(false);
 			clearButton.setEnabled(false);
-			arch_adapter = new TodoListAdapter(this, arch_list.getList(),
-					arch_list, 1);
+			choose_email_list = new ArrayList<TodoItem>();
 			todoListView.setAdapter(arch_adapter);
 		}
 	}
@@ -206,6 +223,7 @@ public class TodoListActivity extends Activity {
 			// delete
 			currentList().removeItem(selectedPosition);
 			update();
+			updateChooseList();
 			break;
 
 		case ITEM_ARCHIVE:
@@ -222,6 +240,7 @@ public class TodoListActivity extends Activity {
 				arch_list.removeItem(selectedPosition);
 			}
 			update();
+			updateChooseList();
 			break;
 
 		default:
@@ -233,7 +252,7 @@ public class TodoListActivity extends Activity {
 	}
 
 	// when no text is entered, show the text:No text entered
-	public void noTextEntered() {
+	private void noTextEntered() {
 		Toast.makeText(this, "No Text Entered", Toast.LENGTH_SHORT).show();
 	}
 
@@ -242,6 +261,16 @@ public class TodoListActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main_todo_list, menu);
 		return true;
+	}
+
+	private void updateChooseList() {
+		int size;
+		size = currentList().size();
+		choose_email_list = new ArrayList<TodoItem>();
+		SparseBooleanArray selectId = todoListView.getCheckedItemPositions();
+		for (int i = 0; i < size; i++)
+			if (selectId.get(i))
+				choose_email_list.add(currentList().get(i));
 	}
 
 	// email select items
@@ -275,7 +304,7 @@ public class TodoListActivity extends Activity {
 
 	// http://stackoverflow.com/questions/2197741/how-can-i-send-emails-from-my-android-application
 	// 2014-9-24
-	public void emailListProcessor(ArrayList<TodoItem> mailList) {
+	private void emailListProcessor(ArrayList<TodoItem> mailList) {
 		StringBuffer mailBody = new StringBuffer();
 		for (int i = 0; i < mailList.size(); i++)
 			mailBody.append(mailList.get(i).getItem() + "\n->Checked: "
@@ -292,8 +321,9 @@ public class TodoListActivity extends Activity {
 					.show();
 		}
 	}
-	//return the current list on the listview
-	public TodoList currentList() {
+
+	// return the current list on the listview
+	private TodoList currentList() {
 		if (categoryID == 0)
 			return todo_list;
 		else
@@ -302,7 +332,7 @@ public class TodoListActivity extends Activity {
 
 	// change the adapter while click on different category
 	// update both todo list and arch list at the same time
-	public void update() {
+	private void update() {
 		todo_adapter.notifyDataSetChanged();
 		arch_adapter.notifyDataSetChanged();
 		TodoListSave.saveInFile(this, todo_list, 0);
