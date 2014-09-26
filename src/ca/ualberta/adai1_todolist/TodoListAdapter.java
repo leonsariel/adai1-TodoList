@@ -16,14 +16,15 @@ import android.widget.TextView;
 
 public class TodoListAdapter extends ArrayAdapter<TodoItem> {
 
-	Context context;
-	List<TodoItem> list;
-	TodoList theList = new TodoList();
-	int category;
+	private Context context;
+	private List<TodoItem> list;
+	private TodoList theList;
+	private int category;
 
 	public TodoListAdapter(Context context, List<TodoItem> list,
 			TodoList theList, int category) {
 		super(context, R.layout.todo_list_item, list);
+		this.theList = new TodoList();
 		this.context = context;
 		this.list = list;
 		this.theList = theList;
@@ -69,8 +70,14 @@ public class TodoListAdapter extends ArrayAdapter<TodoItem> {
 				boolean isChecked) {
 			list.get(this.position).setCheck(isChecked);
 			//save the check status when the check box is clicked
-			TodoListController.saveInFile(context, theList, category);
+			TodoListControl.saveInFile(context, theList, category);
 		}
 	}
+	//http://www.codeofaninja.com/2013/09/android-viewholder-pattern-example.html 2014-9-2
+	private class ViewHolder {
+		CheckBox checkBox;
+		TextView itemText;
+	}
+
 
 }

@@ -25,19 +25,11 @@ public class TodoList {
 	public void addItem(TodoItem newItem) {
 		this.todoList.add(newItem);
 	}
-
-	public void removeItem(TodoItem item) {
-		todoList.remove(item);
-	}
-
+	
 	public void removeItem(int position) {
 		todoList.remove(position);
 	}
-
-	public boolean contains(TodoItem item) {
-		return todoList.contains(item);
-	}
-
+	
 	public int size() {
 		return todoList.size();
 	}

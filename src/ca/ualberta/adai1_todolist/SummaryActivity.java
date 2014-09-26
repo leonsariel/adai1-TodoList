@@ -11,13 +11,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class SummaryActivity extends Activity {
-
+	private TextView showNumber;
+	private Button backToMain;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_summary);
-		TextView showNumber = (TextView) findViewById(R.id.showSummaryView);
-		Button backToMain = (Button) findViewById(R.id.backToMain);
+		showNumber = (TextView) findViewById(R.id.showSummaryView);
+		backToMain = (Button) findViewById(R.id.backToMain);
 		// calculate and show the summary at the summary activity
 		int todo_size = TodoListActivity.todo_list.size();
 		int arch_size = TodoListActivity.arch_list.size();
@@ -38,13 +39,13 @@ public class SummaryActivity extends Activity {
 				+ arch_check + "\n->Unchecked Archived:" + arch_uncheck + "");
 		showNumber.setText(summary);
 		//return to the main activity
-		backToMain.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent(SummaryActivity.this,
-						TodoListActivity.class);
-				startActivity(intent);
-			}
-		});
-
+		backToMain.setOnClickListener(new back_click());
+	}
+	private class back_click implements OnClickListener{
+		public void onClick(View v) {
+			Intent intent = new Intent(SummaryActivity.this,
+					TodoListActivity.class);
+			startActivity(intent);
+		}
 	}
 }

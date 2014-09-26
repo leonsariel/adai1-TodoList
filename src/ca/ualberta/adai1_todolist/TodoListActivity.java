@@ -1,6 +1,5 @@
 package ca.ualberta.adai1_todolist;
 
-
 import java.util.ArrayList;
 import ca.ualberta.adai1_todolist.R;
 import android.app.Activity;
@@ -27,27 +26,27 @@ import android.widget.Toast;
 
 public class TodoListActivity extends Activity {
 	// declare name for save files
-	private static final String TODOLIST = "todoList.sav";
-	private static final String ARCHLIST = "archList.sav";
-	// declare spinner, listview, edittext and buttons
-	private Spinner selectCategory = null;
-	private ListView todoListView = null;
-	private EditText addTodoText = null;
-	private Button addTodoButton = null;
-	private Button clearButton = null;
-	private Button showSumBotton = null;
+	public static final String TODOLISTFILE = "todoList.sav";
+	public static final String ARCHLISTFILE = "archList.sav";
 	// todo_list contains todo items that added
-	public static TodoList todo_list = null;
+	public static TodoList todo_list;
 	// arch_list contains archived items
-	public static TodoList arch_list = null;
-	// choose_email_list contains choosed items
-	private ArrayList<TodoItem> choose_email_list = null;
+	public static TodoList arch_list;
+	// declare spinner, listview, edittext and buttons
+	private Spinner selectCategory;
+	private ListView todoListView;
+	private EditText addTodoText;
+	private Button addTodoButton;
+	private Button clearButton;
+	private Button showSumBotton;
+	// choose_email_list contains chose items
+	private ArrayList<TodoItem> choose_email_list;
 	// todo list adapter
-	private TodoListAdapter todo_adapter = null;
+	private TodoListAdapter todo_adapter;
 	// archived list adapter
-	private TodoListAdapter arch_adapter = null;
+	private TodoListAdapter arch_adapter;
 	// spinner adapter
-	private ArrayAdapter spin_adapter = null;
+	private ArrayAdapter spin_adapter;
 	private String enteredText;
 	// categoryID is for the
 	private static long categoryID;
@@ -69,87 +68,29 @@ public class TodoListActivity extends Activity {
 		spin_adapter = ArrayAdapter.createFromResource(this, R.array.list_type,
 				android.R.layout.simple_spinner_dropdown_item);
 		selectCategory.setAdapter(spin_adapter);
-
 		// change select category
-		selectCategory.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int position, long id) {
-				// enable to change view between todo list and the archived list
-				categoryID = position;
-				changeList();
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-				selectCategory.setSelection(0);
-			}
-		});
-
+		selectCategory.setOnItemSelectedListener(new change_category_click());
 		// show a text about the sum of check status
-		showSumBotton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent(TodoListActivity.this,
-						SummaryActivity.class);
-				startActivity(intent);
-			}
-		});
+		showSumBotton.setOnClickListener(new show_sum_click());
 		// clear the text that entered
-		clearButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				addTodoText.setText("");
-			}
-		});
+		clearButton.setOnClickListener(new clear_click());
 		// add the text that entered to the todo list
-		addTodoButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				TodoItem newItem = new TodoItem(addTodoText.getText()
-						.toString());
-				if (newItem.getItem().trim().length() != 0) {
-					todo_list.addItem(newItem);
-					addTodoText.setText("");
-					update();
-				} else {
-					noTextEntered();
-				}
-
-			}
-		});
+		addTodoButton.setOnClickListener(new add_click());
 
 		// on click on item save the select items in the choose_email_list
-		todoListView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				updateChooseList();
-			}
-		});
+		todoListView.setOnItemClickListener(new choose_item_click());
 
 		// on long click show the menu for delete/archive the item
-		todoListView
-				.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-					public void onCreateContextMenu(ContextMenu menu, View v,
-							ContextMenuInfo menuInfo) {
-						menu.add(0, ITEM_DELETE, 0, "Delete");
-						if (categoryID == 0) {
-							menu.add(0, ITEM_ARCHIVE, 0, "Archive");
-						} else {
-							menu.add(0, ITEM_ARCHIVE, 0, "Unarchive");
-						}
-					}
-				});
+		todoListView.setOnCreateContextMenuListener(new menu_long_click());
 	}
 
 	// https://github.com/Annieday/lonelyTwitter/blob/master/src/ca/ualberta/cs/lonelytwitter/LonelyTwitterActivity.java
 	// 2014-9-23
-
 	@Override
 	protected void onStart() {
 		super.onStart();
-		todo_list = TodoListController.loadFromFile(this, TODOLIST);
-		arch_list = TodoListController.loadFromFile(this, ARCHLIST);
+		todo_list = TodoListControl.loadFromFile(this, TODOLISTFILE);
+		arch_list = TodoListControl.loadFromFile(this, ARCHLISTFILE);
 		choose_email_list = new ArrayList<TodoItem>();
 		todo_adapter = new TodoListAdapter(this, todo_list.getList(),
 				todo_list, 0);
@@ -179,13 +120,87 @@ public class TodoListActivity extends Activity {
 			todoListView.setAdapter(arch_adapter);
 	}
 
+	private class change_category_click implements OnItemSelectedListener {
+		public void onItemSelected(AdapterView<?> parent, View view,
+				int position, long id) {
+			// enable to change view between todo list and the archived list
+			categoryID = position;
+			if (categoryID == 0) {
+				addTodoButton.setEnabled(true);
+				addTodoText.setEnabled(true);
+				clearButton.setEnabled(true);
+				choose_email_list = new ArrayList<TodoItem>();
+				todoListView.setAdapter(todo_adapter);
+			}
+			if (categoryID == 1) {
+				addTodoButton.setEnabled(false);
+				addTodoText.setEnabled(false);
+				clearButton.setEnabled(false);
+				choose_email_list = new ArrayList<TodoItem>();
+				todoListView.setAdapter(arch_adapter);
+			}
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent) {
+			selectCategory.setSelection(0);
+		}
+	}
+
+	private class show_sum_click implements OnClickListener {
+		public void onClick(View v) {
+			Intent intent = new Intent(TodoListActivity.this,
+					SummaryActivity.class);
+			startActivity(intent);
+		}
+	}
+
+	private class clear_click implements OnClickListener {
+		public void onClick(View v) {
+			addTodoText.setText("");
+		}
+	}
+
+	private class add_click implements OnClickListener {
+		public void onClick(View v) {
+			TodoItem newItem = new TodoItem(addTodoText.getText().toString());
+			if (newItem.getItem().trim().length() != 0) {
+				todo_list.addItem(newItem);
+				addTodoText.setText("");
+				update();
+			} else {
+				noTextEntered();
+			}
+
+		}
+	}
+
+	private class choose_item_click implements OnItemClickListener {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			updateChooseList();
+		}
+	}
+
+	private class menu_long_click implements OnCreateContextMenuListener {
+		public void onCreateContextMenu(ContextMenu menu, View v,
+				ContextMenuInfo menuInfo) {
+			menu.add(0, ITEM_DELETE, 0, "Delete");
+			if (categoryID == 0) {
+				menu.add(0, ITEM_ARCHIVE, 0, "Archive");
+			} else {
+				menu.add(0, ITEM_ARCHIVE, 0, "Unarchive");
+			}
+		}
+	}
 	// change the adapter while click on different category
 	// update both todo list and arch list at the same time
 	private void update() {
 		todo_adapter.notifyDataSetChanged();
 		arch_adapter.notifyDataSetChanged();
-		TodoListController.saveInFile(this, todo_list, 0);
-		TodoListController.saveInFile(this, arch_list, 1);
+		TodoListControl.saveInFile(this, todo_list, 0);
+		TodoListControl.saveInFile(this, arch_list, 1);
 	}
 
 	// http://developer.android.com/reference/android/util/SparseBooleanArray.html
@@ -201,26 +216,13 @@ public class TodoListActivity extends Activity {
 				choose_email_list.add(currentList().get(i));
 	}
 
-	// http://www.oschina.net/code/snippet_1014520_27327 2014-9-23
-	private void changeList() {
-		if (categoryID == 0) {
-			addTodoButton.setEnabled(true);
-			addTodoText.setEnabled(true);
-			clearButton.setEnabled(true);
-			choose_email_list = new ArrayList<TodoItem>();
-			todoListView.setAdapter(todo_adapter);
-		}
-		if (categoryID == 1) {
-			addTodoButton.setEnabled(false);
-			addTodoText.setEnabled(false);
-			clearButton.setEnabled(false);
-			choose_email_list = new ArrayList<TodoItem>();
-			todoListView.setAdapter(arch_adapter);
-		}
+	// when no text is entered, show the text:No text entered
+	private void noTextEntered() {
+		Toast.makeText(this, "No Text Entered", Toast.LENGTH_SHORT).show();
 	}
-
 	// http://www.oschina.net/code/snippet_1014520_27327 2014-9-23
 	// handle changes on list while delete/archive items
+	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
 				.getMenuInfo();
@@ -254,15 +256,10 @@ public class TodoListActivity extends Activity {
 		default:
 			break;
 		}
-
 		return super.onContextItemSelected(item);
-
 	}
 
-	// when no text is entered, show the text:No text entered
-	private void noTextEntered() {
-		Toast.makeText(this, "No Text Entered", Toast.LENGTH_SHORT).show();
-	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

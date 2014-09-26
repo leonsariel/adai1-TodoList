@@ -13,14 +13,11 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-public class TodoListController {
-	private static final String TODOLIST = "todoList.sav";
-	private static final String ARCHLIST = "archList.sav";
-
-	public static TodoList loadFromFile(Context context, String fileName) {
+public class TodoListControl {
+	public static TodoList loadFromFile(Context context, String FILENAME) {
 		TodoList list = null;
 		try {
-			FileInputStream fis = context.openFileInput(fileName);
+			FileInputStream fis = context.openFileInput(FILENAME);
 			BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 			Gson gson = new Gson();
 			// Following line from
@@ -37,13 +34,13 @@ public class TodoListController {
 	}
 
 	public static void saveInFile(Context context, TodoList list, int category) {
-		String fileName = null;
+		String FILENAME = null;
 		if (category == 0)
-			fileName = TODOLIST;
+			FILENAME = TodoListActivity.TODOLISTFILE;
 		else
-			fileName = ARCHLIST;
+			FILENAME = TodoListActivity.ARCHLISTFILE;
 		try {
-			FileOutputStream fos = context.openFileOutput(fileName, 0);
+			FileOutputStream fos = context.openFileOutput(FILENAME, 0);
 			Gson gson = new Gson();
 			OutputStreamWriter osw = new OutputStreamWriter(fos);
 			gson.toJson(list, osw);
