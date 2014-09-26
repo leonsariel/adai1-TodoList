@@ -6,8 +6,8 @@
     <string name="list_label">Choose a list</string>
 
     <string-array name="list_type">
-        <item>TODO Items</item>
-        <item>Archive Items</item>
+        <item>TODO List</item>
+        <item>Archive List</item>
     </string-array>
 
     <string name="email_select">Email Select Items</string>
