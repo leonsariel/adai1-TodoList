@@ -1,0 +1,86 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="ca.ualberta.cs.group_travelexpenseapp.AddClaim" >
+
+    <EditText
+        android:id="@+id/startdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/sumbitclaim"
+        android:ems="10"
+        android:hint="Start Date"
+        android:inputType="date" />
+
+    <EditText
+        android:id="@+id/enddate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/startdate"
+        android:layout_alignRight="@+id/sumbitclaim"
+        android:layout_below="@+id/startdate"
+        android:ems="10"
+        android:hint="End Date"
+        android:inputType="date" />
+
+    <EditText
+        android:id="@+id/claimdescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/viewexpenses"
+        android:layout_alignLeft="@+id/enddate"
+        android:layout_alignRight="@+id/sumbitclaim"
+        android:layout_below="@+id/enddate"
+        android:ems="10"
+        android:gravity="left|top"
+        android:hint="Claim Description (e.g. destination and reason for travel)"
+        android:inputType="textMultiLine" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/viewexpenses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/saveclaim"
+        android:layout_alignLeft="@+id/claimdescription"
+        android:layout_alignRight="@+id/sumbitclaim"
+        android:text="View/Add Expenses" />
+
+    <Button
+        android:id="@+id/sumbitclaim"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Submit" />
+
+    <Button
+        android:id="@+id/saveclaim"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/sumbitclaim"
+        android:layout_alignBottom="@+id/sumbitclaim"
+        android:layout_centerHorizontal="true"
+        android:text="Save" />
+
+    <Button
+        android:id="@+id/deleteclaim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/saveclaim"
+        android:layout_alignBottom="@+id/saveclaim"
+        android:layout_alignLeft="@+id/viewexpenses"
+        android:text="Delete" />
+
+</RelativeLayout>

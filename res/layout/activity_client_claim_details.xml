@@ -1,0 +1,83 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="ca.ualberta.cs.group_travelexpenseapp.ClientClaimDetails" >
+
+    <EditText
+        android:id="@+id/clientname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/clientexpenselist"
+        android:ems="10"
+        android:hint="Client Name" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/claimstartdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/clientname"
+        android:layout_alignRight="@+id/clientexpenselist"
+        android:layout_below="@+id/clientname"
+        android:ems="10"
+        android:hint="Start Date"
+        android:inputType="date" />
+
+    <EditText
+        android:id="@+id/claimenddate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/claimstartdate"
+        android:layout_alignRight="@+id/clientexpenselist"
+        android:layout_below="@+id/claimstartdate"
+        android:ems="10"
+        android:hint="End Date"
+        android:inputType="date" />
+
+    <EditText
+        android:id="@+id/clientclaimdescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/claimenddate"
+        android:layout_alignRight="@+id/clientexpenselist"
+        android:layout_below="@+id/claimenddate"
+        android:ems="10"
+        android:hint="Claim Description"
+        android:inputType="textMultiLine" />
+
+    <Button
+        android:id="@+id/approvebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Approve" />
+
+    <Button
+        android:id="@+id/returnbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/clientclaimdescription"
+        android:layout_alignParentBottom="true"
+        android:text="Return" />
+
+    <ListView
+        android:id="@+id/clientexpenselist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/approvebutton"
+        android:layout_alignRight="@+id/approvebutton"
+        android:layout_below="@+id/clientclaimdescription" >
+
+    </ListView>
+
+</RelativeLayout>

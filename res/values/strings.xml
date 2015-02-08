@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Group-TravelExpenseApp</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_client_claimlist">Client Claim List</string>
+    <string name="title_activity_add_claim">Add Claim</string>
+    <string name="title_activity_expense_list">Expense List</string>
+    <string name="title_activity_add_expenses">Add Expenses</string>
+    <string name="title_activity_approver_claimlist">Approver Claim List</string>
+    <string name="title_activity_client_claim_details">Client Claim Details</string>
+    <string name="title_activity_register">Register</string>
+
+</resources>
