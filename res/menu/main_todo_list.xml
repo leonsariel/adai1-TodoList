@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="ca.ualberta.adai1_todolist.TodoListActivity" >
+
+    <item
+        android:id="@+id/emailSelectItems"
+        android:onClick="emailSelectItems"
+        android:title="@string/email_select">
+    </item>
+    <item
+        android:id="@+id/emailCurrentList"
+        android:onClick="emailCurrentList"
+        android:title="@string/email_list">
+    </item>
+    <item
+        android:id="@+id/emailAllItems"
+        android:onClick="emailAllItems"
+        android:title="@string/email_all">
+    </item>
+
+</menu>
